@@ -1,10 +1,17 @@
 # OrdenarisPayments
 OrdenarisPayments es un paquete que facilita la implementación de la vista de pagos dentro de las aplicaciones iOS
 
+![ESTabBarController](https://ordenaris.com/img/logo.png)
+
+[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-orange.svg)](#swift-package-manager)
+[![Swift v5](https://img.shields.io/badge/Swift-5-orange.svg?style=flat)](https://developer.apple.com/swift/)
+
 ## Requirements
-iOS v14.0 o posterior
+* Xcode 8 o posterior
+* iOS v14.0 o posterior
 
 ## Installation
+### Swift Package Manager
 
 Para instalar el paquete, puedes agregar el siguiente enlace en el campo de dependencias de Swift Package Manager: https://github.com/IHM-Ordenaris/SwiftPackageOrdenarisPayments.git
 
