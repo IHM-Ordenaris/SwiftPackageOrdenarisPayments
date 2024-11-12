@@ -5,14 +5,20 @@ OrdenarisPayments es un paquete que facilita la implementación de la vista de p
 iOS v14.0 o posterior
 
 ## Installation
-Para instalar el paquete, puedes agregar el siguiente enlace en el campo de dependencias de Swift Package Manager:
+
+Para instalar el paquete, puedes agregar el siguiente enlace en el campo de dependencias de Swift Package Manager: https://github.com/IHM-Ordenaris/SwiftPackageOrdenarisPayments.git
 
 ## Example
-Paso 1: Importar el paquete y agregar la vista de pagos de tipo OPViewPayments.
+
+Paso 1:
+Importar el paquete y agregar la vista de pagos de tipo OPViewPayments.
+
     import OrdenarisPaymentsSPM
     @IBOutlet weak var viewPayments: OPViewPayments!
     
-Paso 2: Configurar las propiedades de la vista.
+Paso 2: 
+Configurar las propiedades de la vista.
+
         // MARK: 1 - Config View Payments
         self.viewPayments.returnDelay = 15  //(seconds)
         self.viewPayments.returnText = "Volver a la app"
@@ -54,7 +60,9 @@ Paso 2: Configurar las propiedades de la vista.
         payments.delegate = self
         payments.createOrder()
         
-    Paso 3:  Implementar el método delegado para el manejo de acciones.
+    Paso 3:  
+    Implementar el método delegado para el manejo de acciones.
+    
         extension AppExampleController: OrdenarisPaymentsDelegate {
             func ResponseSuccess() {
                 print("✅ Response Success - Crear orden de pago")
