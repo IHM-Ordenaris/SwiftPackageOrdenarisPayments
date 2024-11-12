@@ -20,14 +20,16 @@ public class OrdenarisPaymentsSPM: NSObject,  @unchecked Sendable {
     
     // MARK: - Variables privadas
     private var vista: OPViewPayments
+    private var entorno: Scheme
     private var printEvents: Bool
     private var counterErrorPayment: Int
     private var timer: Timer
     private var counterSeconds: Int
     
     // MARK: - Inicializadores
-    public init(view: OPViewPayments, _ printEvents: Bool = false) {
+    public init(view: OPViewPayments, _ scheme: Scheme = .PROD, _ printEvents: Bool = false) {
         self.vista = view
+        self.entorno = scheme
         self.counterErrorPayment = 0
         self.timer = Timer()
         self.counterSeconds = 0
@@ -72,7 +74,9 @@ public class OrdenarisPaymentsSPM: NSObject,  @unchecked Sendable {
     /// - Parameter url: URL obtenida de la respuesta de servicio
     private func loadWebView(url: URL) {
         DispatchQueue.main.async {
-            print("cargando url: \(url.absoluteString)")
+            if self.printEvents {
+                print("cargando url: \(url.absoluteString)")
+            }
             self.vista.webView.load(URLRequest(url: url))
         }
     }
@@ -87,7 +91,10 @@ public class OrdenarisPaymentsSPM: NSObject,  @unchecked Sendable {
         let objOrd = self.vista.order
         
         let newBodyRequest = ObjCreateOrder(apl: objApp, cre: objCre, ord: objOrd)
-        let urlStr = "https://pagosqa.ordenaris.com/ordenPago/payment/order/create"
+        var urlStr = Constants.Request.Url.paymentsPROD
+        if self.entorno == .QA {
+            urlStr = Constants.Request.Url.paymentsQA
+        }
         
         do {
             let encoder = JSONEncoder()
@@ -95,7 +102,7 @@ public class OrdenarisPaymentsSPM: NSObject,  @unchecked Sendable {
             
             let url = URL(string: urlStr)!
             var request = URLRequest(url: url)
-            request.httpMethod = "POST"
+            request.httpMethod = Constants.Request.Method.post
             
             var body: Data?
             if let data = bodyData as? Data{
@@ -133,7 +140,7 @@ public class OrdenarisPaymentsSPM: NSObject,  @unchecked Sendable {
                         print("Response: \(String(describing: response))")
                         var err = ErrorResponse()
                         err.success = false
-                        err.message = "Lo sentimos, este servicio no está disponible."
+                        err.message = Constants.Response.Message.errorDisponible
                         let resp = response as! HTTPURLResponse
                         err.statusCode = resp.statusCode
                         callback(nil, err)
@@ -149,10 +156,10 @@ public class OrdenarisPaymentsSPM: NSObject,  @unchecked Sendable {
                     }
                     callback(createResponse, nil)
                 } catch {
-                    print("No se pudo parsear el objeto de Crear Orden de Pago")
+                    print("No se pudo parsear el objeto de Crear Orden")
                     var error = ErrorResponse()
                     error.statusCode = -2
-                    error.message = "No se pudo parsear el objeto de Crear Orden de Pago"
+                    error.message = Constants.Response.Message.errorParseo
                     callback(nil, error)
                 }
             }
@@ -162,7 +169,7 @@ public class OrdenarisPaymentsSPM: NSObject,  @unchecked Sendable {
             var error = ErrorResponse()
             error.statusCode = -2
             error.success = false
-            error.message = "Los datos a enviar son incorrectos"
+            error.message = Constants.Response.Message.errorDatos
             error.id = ""
             callback(nil, error)
         }
@@ -172,7 +179,7 @@ public class OrdenarisPaymentsSPM: NSObject,  @unchecked Sendable {
 // MARK: - WKScriptMessageHandler Delegate
 extension OrdenarisPaymentsSPM: WKScriptMessageHandler {
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        if message.name == "logHandler" {
+        if message.name == Constants.Script.handler {
             if self.printEvents {
                 print("\nWEB LOG: \(message.body)")
             }

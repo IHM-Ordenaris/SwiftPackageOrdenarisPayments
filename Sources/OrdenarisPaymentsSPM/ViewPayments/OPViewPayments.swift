@@ -50,7 +50,7 @@ import UIKit
         self.webView.scrollView.bounces = false
 //        self.webView.navigationDelegate = self
         // inject JS to capture console.log output and send to iOS
-        let source = "function captureLog(msg) { window.webkit.messageHandlers.logHandler.postMessage(msg); } window.console.log = captureLog;"
+        let source = Constants.Script.captureLog
         let script = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
         self.webView.configuration.userContentController.addUserScript(script)
         // register the bridge script that listens for the output

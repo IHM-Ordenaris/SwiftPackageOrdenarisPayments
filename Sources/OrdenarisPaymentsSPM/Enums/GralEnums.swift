@@ -30,3 +30,8 @@ internal enum EventWeb: String {
     case returnToApp = "ReturnToApp"
     case cancelRecharge = "CancelRecharge"
 }
+
+public enum Scheme: String {
+    case PROD
+    case QA
+}

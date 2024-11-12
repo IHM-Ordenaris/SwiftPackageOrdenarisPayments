@@ -63,7 +63,7 @@ Configurar las propiedades de la vista.
         self.viewPayments.order.customer = customer
         
         //MARK: 2 - Delegate & Create Order
-        let payments = OrdenarisPaymentsSPM(view: self.viewPayments, true)
+        let payments = OrdenarisPaymentsSPM(view: self.viewPayments, .QA, true)
         payments.delegate = self
         payments.createOrder()
         
