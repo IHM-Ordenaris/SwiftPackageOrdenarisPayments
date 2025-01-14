@@ -48,7 +48,7 @@ public class OrdenarisPaymentsSPM: NSObject,  @unchecked Sendable {
         self.callServiceCreatePaymentOrder(printResponse) { response, error in
             if let _ = response {
                 if (response?.success)! {
-                    self.delegate?.ResponseSuccess()
+                    self.delegate?.responseSuccess()
                     if let urlStr = response?.data?.url {
                         let url = URL(string: urlStr)!
                         self.loadWebView(url: url)
@@ -57,7 +57,7 @@ public class OrdenarisPaymentsSPM: NSObject,  @unchecked Sendable {
                     print("ERROR")
                 }
             }else {
-                self.delegate?.ResponseError(code: (error?.statusCode)!, (error?.message)!)
+                self.delegate?.responseError(code: (error?.statusCode)!, (error?.message)!)
             }
         }
     }
@@ -205,41 +205,41 @@ extension OrdenarisPaymentsSPM: WKScriptMessageHandler {
             switch event {
             // :::::: Optional Events :::::
             case EventWeb.componentInitialization.rawValue:
-                self.delegate?.Event_ComponentInitialization?(obj)
+                self.delegate?.event_ComponentInitialization?(obj)
             case EventWeb.loadingPaymentData.rawValue:
-                self.delegate?.Event_LoadingPaymentData?(obj)
+                self.delegate?.event_LoadingPaymentData?(obj)
             case EventWeb.paymentDataLoad.rawValue:
-                self.delegate?.Event_PaymentDataLoad?(obj)
+                self.delegate?.event_PaymentDataLoad?(obj)
             case EventWeb.loadingPaymentForm.rawValue:
-                self.delegate?.Event_LoadingPaymentForm?(obj)
+                self.delegate?.event_LoadingPaymentForm?(obj)
             case EventWeb.paymentFormLoad.rawValue:
-                self.delegate?.Event_PaymentFormLoad?(obj)
+                self.delegate?.event_PaymentFormLoad?(obj)
             case EventWeb.paymentDataLoadError.rawValue:
-                self.delegate?.Event_PaymentDataLoadError?(obj)
+                self.delegate?.event_PaymentDataLoadError?(obj)
             case EventWeb.requestTokenCreate.rawValue:
-                self.delegate?.Event_RequestTokenCreate?(obj)
+                self.delegate?.event_RequestTokenCreate?(obj)
             case EventWeb.tokenCreate.rawValue:
-                self.delegate?.Event_TokenCreate?(obj)
+                self.delegate?.event_TokenCreate?(obj)
             case EventWeb.captureInit.rawValue:
-                self.delegate?.Event_CaptureInit?(obj)
+                self.delegate?.event_CaptureInit?(obj)
             case EventWeb.captureCancel.rawValue:
-                self.delegate?.Event_CaptureCancel?(obj)
+                self.delegate?.event_CaptureCancel?(obj)
             case EventWeb.errorToShowCheckout.rawValue:
-                self.delegate?.Event_ErrorToShowCheckout?(obj)
+                self.delegate?.event_ErrorToShowCheckout?(obj)
             case EventWeb.errorOnloadScript.rawValue:
-                self.delegate?.Event_ErrorOnloadScript?(obj)
+                self.delegate?.event_ErrorOnloadScript?(obj)
             case EventWeb.changeRecurrence.rawValue:
-                self.delegate?.Event_ChangeRecurrence?(obj)
+                self.delegate?.event_ChangeRecurrence?(obj)
             case EventWeb.changeOnForm.rawValue:
-                self.delegate?.Event_ChangeOnForm?(obj)
+                self.delegate?.event_ChangeOnForm?(obj)
             case EventWeb.goToDetail.rawValue:
-                self.delegate?.Event_GoToDetail?(obj)
+                self.delegate?.event_GoToDetail?(obj)
             case EventWeb.requestPayment.rawValue:
-                self.delegate?.Event_RequestPayment?(obj)
+                self.delegate?.event_RequestPayment?(obj)
             
             // :::::: Forced Events :::::
             case EventWeb.paymentSuccess.rawValue:
-                self.delegate?.Event_PaymentSuccess(obj)
+                self.delegate?.event_PaymentSuccess(obj)
                 self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
                     DispatchQueue.main.async {
                         if self.counterSeconds != self.vista.returnDelay {
@@ -247,22 +247,22 @@ extension OrdenarisPaymentsSPM: WKScriptMessageHandler {
                         } else {
                             self.counterSeconds = 0
                             self.timer.invalidate()
-                            self.delegate?.Event_ReturnToApp("Return to app for returnDelay complete")
+                            self.delegate?.event_ReturnToApp("Return to app for returnDelay complete")
                         }
                     }
                 }
             case EventWeb.paymentError.rawValue:
-                self.delegate?.Event_PaymentError(obj)
+                self.delegate?.event_PaymentError(obj)
                 if self.counterErrorPayment != 2 {
                     self.counterErrorPayment += 1
                 } else {
                     self.counterErrorPayment = 0
-                    self.delegate?.Event_ReturnToApp(obj)
+                    self.delegate?.event_ReturnToApp(obj)
                 }
             case EventWeb.returnToApp.rawValue:
-                self.delegate?.Event_ReturnToApp(obj)
+                self.delegate?.event_ReturnToApp(obj)
             case EventWeb.cancelRecharge.rawValue :
-                self.delegate?.Event_CancelRecharge(obj)
+                self.delegate?.event_CancelRecharge(obj)
             default:
                 print("Sin acción para el evento Web...")
             }

@@ -71,22 +71,22 @@ Configurar las propiedades de la vista.
     Implementar el método delegado para el manejo de acciones.
     
         extension AppExampleController: OrdenarisPaymentsDelegate {
-            func ResponseSuccess() {
+            func responseSuccess() {
                 print("✅ Response Success - Crear orden de pago")
             }
-            func ResponseError(code: Int, _ message: String) {
+            func responseError(code: Int, _ message: String) {
                 print("🚫 \(message) - \(code)")
             }
-            func Event_PaymentSuccess(_ objReturn: Any) {
+            func event_PaymentSuccess(_ objReturn: Any) {
                 print("🔔 Payment Success")
             }
-            func Event_PaymentError(_ objReturn: Any) {
+            func event_PaymentError(_ objReturn: Any) {
                 print("🔔 Payment Error")
             }
-            func Event_ReturnToApp(_ objReturn: Any) {
+            func event_ReturnToApp(_ objReturn: Any) {
                 print("🔔 Return to app")
             }
-            func Event_CancelRecharge(_ objReturn: Any) {
+            func event_CancelRecharge(_ objReturn: Any) {
                 print("🔔 Cancel Recharge")
             }
         }
