@@ -20,6 +20,7 @@ public class OrdenarisPaymentsSPM: NSObject,  @unchecked Sendable {
     
     // MARK: - Variables privadas
     private var vista: OPViewPayments
+    private var tipoPayment: TipoPayment
     private var entorno: Scheme
     private var printEvents: Bool
     private var counterErrorPayment: Int
@@ -27,8 +28,9 @@ public class OrdenarisPaymentsSPM: NSObject,  @unchecked Sendable {
     private var counterSeconds: Int
     
     // MARK: - Inicializadores
-    public init(view: OPViewPayments, _ scheme: Scheme = .PROD, _ printEvents: Bool = false) {
+    public init(view: OPViewPayments, typePayment: TipoPayment = .recharge, _ scheme: Scheme = .PROD, _ printEvents: Bool = false) {
         self.vista = view
+        self.tipoPayment = typePayment
         self.entorno = scheme
         self.counterErrorPayment = 0
         self.timer = Timer()
@@ -89,8 +91,8 @@ public class OrdenarisPaymentsSPM: NSObject,  @unchecked Sendable {
         let objApp = self.vista.objApp
         let objCre = self.vista.credentials
         let objOrd = self.vista.order
+        let objOrd_SIM = self.vista.order_SIM
         
-        let newBodyRequest = ObjCreateOrder(apl: objApp, cre: objCre, ord: objOrd)
         var urlStr = Constants.Request.Url.paymentsPROD
         if self.entorno == .QA {
             urlStr = Constants.Request.Url.paymentsQA
@@ -98,7 +100,14 @@ public class OrdenarisPaymentsSPM: NSObject,  @unchecked Sendable {
         
         do {
             let encoder = JSONEncoder()
-            let bodyData = try encoder.encode(newBodyRequest)
+            
+            let newBodyRequest = ObjCreateOrder(apl: objApp, cre: objCre, ord: objOrd)
+            var bodyData = try encoder.encode(newBodyRequest)
+            
+            if self.tipoPayment == .sim || self.tipoPayment == .eSim {
+                let newBodyRequest_SIM = ObjCreateOrder_SIM(apl: objApp, cre: objCre, ord: objOrd_SIM)
+                bodyData = try encoder.encode(newBodyRequest_SIM)
+            }
             
             let url = URL(string: urlStr)!
             var request = URLRequest(url: url)

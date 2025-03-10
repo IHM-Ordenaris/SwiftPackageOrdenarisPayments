@@ -17,6 +17,7 @@ import UIKit
     // MARK: - Variables públicas
     public var credentials = ObjCredentials()
     public var order = ObjOrden()
+    public var order_SIM = ObjOrden_SIM()
 
     // MARK: - IBOutlets
     @IBOutlet private var containerView: UIView!

@@ -19,6 +19,17 @@ internal struct ObjCreateOrder: Codable {
     }
 }
 
+internal struct ObjCreateOrder_SIM: Codable {
+    var aplication: ObjApplication
+    var credentials: ObjCredentials
+    var orden: ObjOrden_SIM
+    init(apl: ObjApplication, cre: ObjCredentials, ord: ObjOrden_SIM) {
+        aplication = apl
+        credentials = cre
+        orden = ord
+    }
+}
+
 public struct ObjApplication: Codable {
     var returnDelay: Int            // Opcional - Segundos que mostrarán en el contador antes de regresar a la vista
     var returnText: String          // Opcional - Texto a mostrar que generará un evento "ReturnToApp"
@@ -80,6 +91,33 @@ public struct ObjOrden: Codable {
     }
 }
 
+public struct ObjOrden_SIM: Codable {
+    internal var campaign: String?      // Solo aplica para Web, texto de campaña a mostrar
+    public var total: Double            // Valor total de la venta
+    public var orderId: String          // Identificador de la oferta
+    public  var reference1: String      // - AquiereLínea: uuid
+    public var reference2: String       // Identificador de la oferta
+    public var reference3: Bool         // - AquiereLínea: FALSE
+    public var reference4: String       // - AquiereLínea: Vacío
+    public var reference5: String       // email del beneficiario
+    public var products: [ObjProduct]   // Arreglo de productos a vender
+    public var customer: ObjCustomer    // Información del cliente
+    public var shipment: ObjShipment?   // Información para entrega de SIM
+    init() {
+        campaign = nil
+        total = 0
+        orderId = ""
+        reference1 = ""
+        reference2 = ""
+        reference3 = false
+        reference4 = ""
+        reference5 = ""
+        products = []
+        customer = ObjCustomer()
+        shipment = nil
+    }
+}
+
 public struct ObjProduct: Codable {
     public var name: String        // Nombre de la oferta
     public var uuid: String        // Identificador de la oferta
@@ -110,4 +148,45 @@ public struct ObjCustomer: Codable {
         phone = ""
         logged = "true"
     }
+}
+
+public struct ObjShipment: Codable {
+    public var contactName: String
+    public var contactLastname: String
+    public var phone: String
+    public var email: String
+    public var street: String
+    public var exteriorNumber: String
+    public var interiorNumber: String
+    public var cost: Double
+    public var city: String
+    public var reference: String
+    public var postalCode: String
+    public var colony: String
+    public var town: String
+    public var state: String
+    public var country: String
+    public init() {
+        contactName = ""
+        contactLastname = ""
+        phone = ""
+        email = ""
+        street = ""
+        exteriorNumber = ""
+        interiorNumber = ""
+        cost = 0
+        city = ""
+        reference = ""
+        postalCode = ""
+        colony = ""
+        town = ""
+        state = ""
+        country = ""
+    }
+}
+
+public enum TipoPayment: String {
+    case recharge
+    case sim
+    case eSim
 }
