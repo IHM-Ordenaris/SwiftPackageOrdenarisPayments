@@ -21,7 +21,8 @@ struct Constants {
     struct Request {
         struct Url {
             static var paymentsPROD: String {
-                return "https://pagos.ordenaris.com/ordenPago/payment/order/create"
+                return "https://pagos.ordenaris.com/paynow/app/v1/payment/order/create"
+//                return "https://pagos.ordenaris.com/ordenPago/payment/order/create"
             }
             static var paymentsQA: String {
                 return "https://pagosqa.ordenaris.com/ordenPago/payment/order/create"
